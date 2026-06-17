@@ -11,13 +11,12 @@ import {
 
 // ─── FIREBASE ─────────────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyDquMvVFIUwHFEqLLYe_z-nj4WjOr0xkZM",
-  authDomain: "kofvee-90d01.firebaseapp.com",
-  projectId: "kofvee-90d01",
-  storageBucket: "kofvee-90d01.firebasestorage.app",
-  messagingSenderId: "357056124751",
-  appId: "1:357056124751:web:4054d75f6c2e5335ba573a",
-  measurementId: "G-M0WK6Z0XWL"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -31,7 +30,7 @@ const LOGO = `data:image/jpeg;base64,${LOGO_B64}`;
 const OUTLET = "Kofvee · Petaling Jaya";
 const ADMIN_EMAIL = "admin@kofvee.com";
 const STAMPS_FOR_FREE = 8;
-const GEMINI_API_KEY = "AQ.Ab8RN6JInpi0T-qR5LezioSdGt2crY_G7H_PD5ZkHP4J1_ecFg";
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const DEFAULT_MENU = [
   { id:"m1", category:"Cold Brew", name:"Original Cold Brew", desc:"18hr steeped, smooth & dark", price:12, available:true, emoji:"🖤" },
