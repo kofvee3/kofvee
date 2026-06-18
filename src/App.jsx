@@ -30,7 +30,7 @@ const LOGO_B64 = "iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoCAYAAABNo9TkAAAAUGVYSWZNTQAqAA
 const LOGO = `data:image/png;base64,${LOGO_B64}`;
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
-const OUTLET = "Kofvee · Petaling Jaya";
+const OUTLET = "L 2016, Endah Parade, Bandar Baru Sri Petaling, 57000 Kuala Lumpur";
 const ADMIN_EMAIL = "admin@kofvee.com";
 const STAMPS_FOR_FREE = 8;
 const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
@@ -100,24 +100,7 @@ function Spinner() {
   </div>;
 }
 
-// ─── GEMINI AI SUGGESTION ─────────────────────────────────────────────────────
-async function getGeminiSuggestion(prompt, menuItems) {
-  const menuText = menuItems.map(m => `${m.name} (${m.category}, RM${m.price}): ${m.desc}`).join("\n");
-  const fullPrompt = `You are a friendly barista at Kofvee, a Malaysian grab-and-go coffee shop in Petaling Jaya. 
-Menu:\n${menuText}\n\nCustomer says: "${prompt}"\n\nRecommend 1-2 drinks in 2-3 sentences max. Be warm, specific, and mention the price. No bullet points.`;
-  
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
-    });
-    const data = await res.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Try our Kofvee Signature — it's our most popular drink!";
-  } catch {
-    return "Try our Kofvee Signature — it's a crowd favourite at RM16!";
-  }
-}
+
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 function LoginPage() {
@@ -162,7 +145,7 @@ function LoginPage() {
         <div style={{textAlign:"center",marginBottom:28}}>
           <img src={LOGO} alt="Kofvee" style={{width:90,height:90,objectFit:"contain",borderRadius:16,marginBottom:10}}/>
           <div className="kofvee-wordmark" style={{fontSize:28}}>Kofvee</div>
-          <div className="kofvee-tagline" style={{fontSize:12,fontWeight:700,letterSpacing:"0.12em"}}>GRAB & GO · PETALING JAYA</div>
+          <div className="kofvee-tagline" style={{fontSize:12,fontWeight:700,letterSpacing:"0.12em"}}>GRAB & GO · KUALA LUMPUR</div>
         </div>
 
         <div style={{display:"flex",background:T.surfaceAlt,borderRadius:12,padding:4,marginBottom:20,border:`1px solid ${T.border}`}}>
@@ -236,57 +219,7 @@ function StampCard({ stamps, onRedeem, canRedeem }) {
   );
 }
 
-// ─── AI SUGGESTION WIDGET ─────────────────────────────────────────────────────
-function AISuggestion({ menu, orderHistory }) {
-  const [open,setOpen]=useState(false);
-  const [input,setInput]=useState("");
-  const [messages,setMessages]=useState([{role:"ai",text:"Hi! Tell me your mood, the weather, or how you feel and I'll suggest the perfect drink for you ☕"}]);
-  const [loading,setLoading]=useState(false);
-  const bottomRef=useRef(null);
 
-  useEffect(()=>{bottomRef.current?.scrollIntoView({behavior:"smooth"});},[messages]);
-
-  const send = async () => {
-    if(!input.trim()||loading)return;
-    const userMsg = input.trim();
-    setMessages(p=>[...p,{role:"user",text:userMsg}]);
-    setInput(""); setLoading(true);
-    
-    const historyContext = orderHistory.length>0
-      ? `Customer's recent orders: ${[...new Set(orderHistory.flatMap(o=>o.items.map(i=>i.name)))].slice(0,5).join(", ")}.`
-      : "";
-    
-    const reply = await getGeminiSuggestion(`${historyContext} ${userMsg}`, menu.filter(m=>m.available));
-    setMessages(p=>[...p,{role:"ai",text:reply}]);
-    setLoading(false);
-  };
-
-  return (
-    <div style={{marginBottom:20}}>
-      <button onClick={()=>setOpen(!open)} style={{width:"100%",background:`linear-gradient(135deg,#1a3a2a,#2d5a3d)`,color:"#FFF",border:"none",borderRadius:14,padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer",fontWeight:600,fontSize:14}}>
-        <span>✨ Ask AI — What should I drink?</span>
-        <span style={{fontSize:18,transform:open?"rotate(180deg)":"none",transition:"transform 0.2s"}}>⌄</span>
-      </button>
-      {open&&(
-        <div style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:"0 0 14px 14px",borderTop:"none",padding:16,animation:"fadeIn 0.2s ease"}}>
-          <div style={{height:180,overflowY:"auto",display:"flex",flexDirection:"column",gap:8,marginBottom:12}}>
-            {messages.map((m,i)=>(
-              <div key={i} style={{alignSelf:m.role==="user"?"flex-end":"flex-start",maxWidth:"85%",background:m.role==="user"?T.accent:T.surfaceAlt,color:m.role==="user"?"#FFF":T.ink,borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",padding:"10px 14px",fontSize:13,lineHeight:1.5}}>
-                {m.text}
-              </div>
-            ))}
-            {loading&&<div style={{alignSelf:"flex-start",background:T.surfaceAlt,borderRadius:"14px 14px 14px 4px",padding:"10px 14px",fontSize:13,color:T.inkLight}}>Thinking...</div>}
-            <div ref={bottomRef}/>
-          </div>
-          <div style={{display:"flex",gap:8}}>
-            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="e.g. something cold and sweet..." style={{flex:1,padding:"10px 14px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surfaceAlt,fontSize:14,outline:"none"}}/>
-            <button onClick={send} disabled={loading||!input.trim()} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:10,padding:"10px 16px",cursor:"pointer",fontWeight:700}}>→</button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ─── ORDER TRACKING ───────────────────────────────────────────────────────────
 function OrderTracker({ orders }) {
@@ -465,8 +398,7 @@ function CustomerView({ user, menu, banner }) {
               <img src={LOGO} alt="" style={{width:54,height:54,objectFit:"contain",borderRadius:10,opacity:0.9}}/>
             </div>
 
-            {/* AI Suggestion */}
-            <AISuggestion menu={menu} orderHistory={orders}/>
+
 
             {/* Category tabs */}
             <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
