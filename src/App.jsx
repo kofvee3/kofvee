@@ -108,7 +108,6 @@ function LoginPage() {
   const [password,setPassword]=useState("");
   const [error,setError]=useState("");
   const [loading,setLoading]=useState(false);
-  const [mode,setMode]=useState("customer");
   const [showRegister,setShowRegister]=useState(false);
   const [regName,setRegName]=useState("");
 
@@ -116,15 +115,14 @@ function LoginPage() {
     if(!email||!password){setError("Please enter email and password.");return;}
     setLoading(true);setError("");
     try {
-      const cred = await signInWithEmailAndPassword(auth,email,password);
-      const isAdmin = cred.user.email===ADMIN_EMAIL;
-      if(mode==="admin"&&!isAdmin){await signOut(auth);setError("Not an admin account.");setLoading(false);return;}
-      if(mode==="customer"&&isAdmin){await signOut(auth);setError("Use admin login.");setLoading(false);return;}
+      await signInWithEmailAndPassword(auth,email,password);
+      // auto-routed in App root based on email
     } catch{setError("Wrong email or password.");setLoading(false);}
   };
 
   const handleRegister = async () => {
     if(!email||!password||!regName){setError("Fill in all fields.");return;}
+    if(email===ADMIN_EMAIL){setError("This email is not allowed for registration.");return;}
     setLoading(true);setError("");
     try {
       const cred = await createUserWithEmailAndPassword(auth,email,password);
@@ -142,38 +140,34 @@ function LoginPage() {
   return (
     <div style={{minHeight:"100vh",background:T.bg,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
       <div style={{width:"100%",maxWidth:400}}>
-        <div style={{textAlign:"center",marginBottom:28}}>
-          <img src={LOGO} alt="Kofvee" style={{width:90,height:90,objectFit:"contain",borderRadius:16,marginBottom:10}}/>
-          <div className="kofvee-wordmark" style={{fontSize:28}}>Kofvee</div>
-          <div className="kofvee-tagline" style={{fontSize:12,fontWeight:700,letterSpacing:"0.12em"}}>GRAB & GO · KUALA LUMPUR</div>
+        <div style={{textAlign:"center",marginBottom:32}}>
+          <img src={LOGO} alt="Kofvee" style={{width:100,height:100,objectFit:"contain",borderRadius:16,marginBottom:12}}/>
+          <div className="kofvee-wordmark" style={{fontSize:30}}>Kofvee</div>
+          <div className="kofvee-tagline" style={{fontSize:12,fontWeight:700,letterSpacing:"0.12em",marginTop:2}}>GRAB & GO · KUALA LUMPUR</div>
         </div>
 
-        <div style={{display:"flex",background:T.surfaceAlt,borderRadius:12,padding:4,marginBottom:20,border:`1px solid ${T.border}`}}>
-          {["customer","admin"].map(m=>(
-            <button key={m} onClick={()=>{setMode(m);setError("");setShowRegister(false);}} style={{flex:1,background:mode===m?T.accent:"transparent",color:mode===m?"#FFF":T.inkMid,border:"none",borderRadius:9,padding:"10px",fontSize:14,fontWeight:600,cursor:"pointer"}}>
-              {m==="customer"?"☕ Order":"⚙️ Admin"}
+        {/* Sign in / Register toggle — customer only */}
+        <div style={{display:"flex",background:T.surfaceAlt,borderRadius:10,padding:3,marginBottom:20,border:`1px solid ${T.border}`}}>
+          {[false,true].map(r=>(
+            <button key={r} onClick={()=>{setShowRegister(r);setError("");}} style={{flex:1,background:showRegister===r?"#FFF":"transparent",color:T.ink,border:"none",borderRadius:8,padding:"10px",fontSize:14,fontWeight:600,cursor:"pointer",boxShadow:showRegister===r?"0 1px 4px rgba(0,0,0,0.1)":"none"}}>
+              {r?"New Account":"Sign In"}
             </button>
           ))}
         </div>
 
-        {mode==="customer"&&(
-          <div style={{display:"flex",background:T.surfaceAlt,borderRadius:10,padding:3,marginBottom:16,border:`1px solid ${T.border}`}}>
-            {[false,true].map(r=>(
-              <button key={r} onClick={()=>{setShowRegister(r);setError("");}} style={{flex:1,background:showRegister===r?"#FFF":"transparent",color:T.ink,border:"none",borderRadius:8,padding:"8px",fontSize:13,fontWeight:600,cursor:"pointer",boxShadow:showRegister===r?"0 1px 4px rgba(0,0,0,0.1)":"none"}}>
-                {r?"New account":"Sign in"}
-              </button>
-            ))}
-          </div>
-        )}
-
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
           {showRegister&&<input value={regName} onChange={e=>setRegName(e.target.value)} placeholder="Your name" style={inp}/>}
           <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" type="email" style={inp}/>
-          <input value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" type="password" style={inp} onKeyDown={e=>e.key==="Enter"&&(showRegister?handleRegister():handleLogin())}/>
+          <input value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" type="password" style={inp}
+            onKeyDown={e=>e.key==="Enter"&&(showRegister?handleRegister():handleLogin())}/>
           {error&&<div style={{color:T.red,fontSize:13,textAlign:"center"}}>{error}</div>}
           <Btn full onClick={showRegister?handleRegister:handleLogin} disabled={loading}>
-            {loading?"Please wait...":(showRegister?"Create Account":mode==="customer"?"Sign In to Order":"Admin Sign In")}
+            {loading?"Please wait...":showRegister?"Create Account":"Sign In"}
           </Btn>
+        </div>
+
+        <div style={{marginTop:20,textAlign:"center",fontSize:12,color:T.inkLight}}>
+          By signing in you agree to our terms of service.
         </div>
       </div>
     </div>
