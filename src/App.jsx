@@ -825,7 +825,7 @@ function AdminMenu({ menu, onToggle, onAdd, onEdit, onDelete, categories, onAddC
         </div>
       )}
 
-      {activeMenuTab==="items"&&(
+      {activeMenuTab==="items"&&(<>
 
       {(adding||editing)&&(
         <div style={{background:T.surfaceAlt,border:`1px solid ${T.border}`,borderRadius:14,padding:20,marginBottom:20,display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
