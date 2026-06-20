@@ -53,26 +53,16 @@ const DEFAULT_MENU = [
 
 const CATEGORIES = ["All","Cold Brew","Espresso","Signature","Non-Coffee","Bites"];
 
-// ─── STATIC DRINK IMAGES ─────────────────────────────────────────────────────
 const DRINK_IMAGES = {
-  "m1": "/drinks/original-cold-brew.jpg",
-  "m2": "/drinks/salted-caramel-cold-brew.jpg",
-  "m3": "/drinks/coconut-cold-brew.jpg",
-  "m4": "/drinks/kofvee-white.jpg",
-  "m5": "/drinks/iced-americano.jpg",
-  "m6": "/drinks/oat-latte.jpg",
-  "m7": "/drinks/kofvee-signature.jpg",
-  "m8": "/drinks/brown-sugar-oat.jpg",
-  "m9": "/drinks/matcha-oat.jpg",
-  "m10": "/drinks/hojicha-latte.jpg",
-  "m11": "/drinks/cheesecake.jpg",
-  "m12": "/drinks/overnight-oat-cup.jpg",
-  "m13": "/drinks/matcha-cheesecake.jpg",
+  "m1":"/drinks/original-cold-brew.jpg","m2":"/drinks/salted-caramel-cold-brew.jpg",
+  "m3":"/drinks/coconut-cold-brew.jpg","m4":"/drinks/kofvee-white.jpg",
+  "m5":"/drinks/iced-americano.jpg","m6":"/drinks/oat-latte.jpg",
+  "m7":"/drinks/kofvee-signature.jpg","m8":"/drinks/brown-sugar-oat.jpg",
+  "m9":"/drinks/matcha-oat.jpg","m10":"/drinks/hojicha-latte.jpg",
+  "m11":"/drinks/cheesecake.jpg","m12":"/drinks/overnight-oat-cup.jpg",
+  "m13":"/drinks/matcha-cheesecake.jpg",
 };
-
-function getItemImage(item) {
-  return item.imageUrl || DRINK_IMAGES[item.id] || null;
-}
+function getItemImage(item) { return item.imageUrl || DRINK_IMAGES[item.id] || null; }
 
 // ─── TOKENS ──────────────────────────────────────────────────────────────────
 const T = {
@@ -281,7 +271,6 @@ function OrderHistory({ orders }) {
             </div>
           ))}
         </div>
-        </div>
       )}
     </div>
   );
@@ -417,60 +406,54 @@ function CustomerView({ user, menu, banner, categories }) {
 
 
             {/* Category tabs */}
-            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:20,overflowX:"auto",paddingBottom:4}}>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
               {(categories||CATEGORIES).map(c=>(
-                <button key={c} onClick={()=>setActiveCategory(c)} style={{background:activeCategory===c?T.accent:T.surface,color:activeCategory===c?"#FFF":T.inkMid,border:`1px solid ${activeCategory===c?T.accent:T.border}`,borderRadius:50,padding:"8px 18px",fontSize:13,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",flexShrink:0,transition:"all 0.15s"}}>{c==="All"?"All Menu":c}</button>
+                <button key={c} onClick={()=>setActiveCategory(c)} style={{background:activeCategory===c?T.accent:T.surface,color:activeCategory===c?"#FFF":T.inkMid,border:`1px solid ${activeCategory===c?T.accent:T.border}`,borderRadius:50,padding:"8px 18px",fontSize:13,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap"}}>{c==="All"?"All Menu":c}</button>
               ))}
             </div>
 
-            {/* Menu GRID - image cards */}
+            {/* Menu GRID */}
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:16}}>
-              {filtered.map(item=>{
-                const inCart=cart.find(i=>i.id===item.id);
-                const imgSrc=getItemImage(item);
+              {filtered.map(item => {
+                const inCart = cart.find(i => i.id === item.id);
+                const imgSrc = getItemImage(item);
                 return (
                   <div key={item.id} style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:18,overflow:"hidden",opacity:item.available?1:0.55,boxShadow:"0 2px 12px rgba(0,0,0,0.06)",transition:"transform 0.15s,box-shadow 0.15s"}}
                     onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 6px 24px rgba(0,0,0,0.12)";}}
                     onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="0 2px 12px rgba(0,0,0,0.06)";}}
                   >
-                    {/* Image — full width, no emoji fallback icon */}
                     <div style={{position:"relative",height:200,background:`linear-gradient(135deg,${T.accent},#4a2218)`,overflow:"hidden"}}>
                       {imgSrc
-                        ?<img src={imgSrc} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                        :<div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8}}>
-                          <div style={{fontSize:56}}>{item.emoji}</div>
-                          <div style={{fontSize:11,color:"rgba(255,255,255,0.5)",letterSpacing:"0.08em"}}>PHOTO COMING SOON</div>
-                        </div>
+                        ? <img src={imgSrc} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                        : <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8}}>
+                            <div style={{fontSize:56}}>{item.emoji}</div>
+                            <div style={{fontSize:11,color:"rgba(255,255,255,0.5)",letterSpacing:"0.08em"}}>PHOTO COMING SOON</div>
+                          </div>
                       }
-                      {/* Category badge */}
-                      <span style={{position:"absolute",top:10,left:10,background:"rgba(0,0,0,0.55)",color:"#FFF",borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:700,backdropFilter:"blur(4px)",letterSpacing:"0.06em"}}>{item.category}</span>
-                      {!item.available&&(
+                      <span style={{position:"absolute",top:10,left:10,background:"rgba(0,0,0,0.55)",color:"#FFF",borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:700,backdropFilter:"blur(4px)"}}>{item.category}</span>
+                      {!item.available && (
                         <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.55)",display:"flex",alignItems:"center",justifyContent:"center"}}>
                           <span style={{background:T.red,color:"#FFF",borderRadius:20,padding:"6px 18px",fontSize:13,fontWeight:700}}>Sold Out</span>
                         </div>
                       )}
                     </div>
-
-                    {/* Card body */}
                     <div style={{padding:"14px 16px 16px"}}>
                       <div style={{fontFamily:"'DM Serif Display',serif",fontSize:17,fontWeight:700,color:T.ink,marginBottom:4,lineHeight:1.3}}>{item.name}</div>
                       <div style={{fontSize:12,color:T.inkMid,lineHeight:1.5,marginBottom:14,minHeight:34}}>{item.desc}</div>
                       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                         <div>
-                          <span style={{fontSize:11,color:T.inkLight,fontWeight:500}}>RM </span>
-                          <span style={{fontSize:22,fontWeight:800,color:T.ink,letterSpacing:"-0.5px"}}>{item.price}</span>
+                          <span style={{fontSize:11,color:T.inkLight}}>RM </span>
+                          <span style={{fontSize:22,fontWeight:800,color:T.ink}}>{item.price}</span>
                         </div>
-                        {item.available&&(
-                          inCart?(
-                            <div style={{display:"flex",alignItems:"center",gap:6,background:T.surfaceAlt,borderRadius:50,padding:"4px 6px",border:`1px solid ${T.border}`}}>
-                              <button onClick={()=>changeQty(item.id,-1)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>−</button>
-                              <span style={{fontWeight:700,minWidth:20,textAlign:"center",fontSize:14}}>{inCart.qty}</span>
-                              <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
-                            </div>
-                          ):(
-                            <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:50,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer"}}>+ Add</button>
-                          )
-                        )}
+                        {item.available && (inCart ? (
+                          <div style={{display:"flex",alignItems:"center",gap:6,background:T.surfaceAlt,borderRadius:50,padding:"4px 6px",border:`1px solid ${T.border}`}}>
+                            <button onClick={()=>changeQty(item.id,-1)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>−</button>
+                            <span style={{fontWeight:700,minWidth:20,textAlign:"center",fontSize:14}}>{inCart.qty}</span>
+                            <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
+                          </div>
+                        ) : (
+                          <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:50,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer"}}>+ Add</button>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -527,7 +510,7 @@ function CustomerView({ user, menu, banner, categories }) {
                   {cart.map(item=>(
                     <div key={item.id} style={{display:"flex",alignItems:"center",gap:10}}>
                       <div style={{width:36,height:36,borderRadius:8,overflow:"hidden",background:T.surfaceAlt,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                        {getItemImage(item)?<img src={getItemImage(item)} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:18}}>{item.emoji}</span>}
+                        {item.imageUrl?<img src={item.imageUrl} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:18}}>{item.emoji}</span>}
                       </div>
                       <div style={{flex:1}}>
                         <div style={{fontSize:14,fontWeight:600}}>{item.name}</div>
@@ -600,30 +583,24 @@ function AdminView({ user, menu, orders, banner }) {
   const topItems=Object.entries(itemSales).sort((a,b)=>b[1]-a[1]).slice(0,5);
 
   const [categories,setCategories]=useState(["All","Cold Brew","Espresso","Signature","Non-Coffee","Bites"]);
-
   useEffect(()=>{
     return onSnapshot(doc(db,"settings","categories"),snap=>{
       if(snap.exists()&&snap.data().list) setCategories(["All",...snap.data().list]);
     });
   },[]);
-
+  const addCategory=async(cat)=>{
+    const current=categories.filter(c=>c!=="All");
+    if(current.includes(cat))return;
+    await setDoc(doc(db,"settings","categories"),{list:[...current,cat]});
+  };
+  const deleteCategory=async(cat)=>{
+    await setDoc(doc(db,"settings","categories"),{list:categories.filter(c=>c!=="All"&&c!==cat)});
+  };
   const updateStatus=async(id,status)=>await updateDoc(doc(db,"orders",id),{status});
   const toggleItem=async(item)=>await updateDoc(doc(db,"menu",item.id),{available:!item.available});
   const addItem=async(item)=>await addDoc(collection(db,"menu"),item);
   const editItem=async(item)=>{const{id,...data}=item;await updateDoc(doc(db,"menu",id),data);};
   const deleteItem=async(id)=>await deleteDoc(doc(db,"menu",id));
-
-  const addCategory=async(cat)=>{
-    const current=categories.filter(c=>c!=="All");
-    if(current.includes(cat))return;
-    const updated=[...current,cat];
-    await setDoc(doc(db,"settings","categories"),{list:updated});
-  };
-
-  const deleteCategory=async(cat)=>{
-    const updated=categories.filter(c=>c!=="All"&&c!==cat);
-    await setDoc(doc(db,"settings","categories"),{list:updated});
-  };
 
   const saveBanner=async(data)=>{
     await setDoc(doc(db,"settings","banner"),data);
@@ -751,149 +728,165 @@ function AdminAnalytics({ orders, topItems, todayRev, totalRev }) {
 }
 
 function AdminMenu({ menu, onToggle, onAdd, onEdit, onDelete, categories, onAddCategory, onDeleteCategory }) {
-  const [adding,setAdding]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const [activeMenuTab,setActiveMenuTab]=useState("items");
-  const empty={name:"",category:categories[0]||"Cold Brew",desc:"",price:"",emoji:"☕",imageUrl:""};
-  const [form,setForm]=useState(empty);
-  const [uploading,setUploading]=useState(false);
-  const [uploadPreview,setUploadPreview]=useState(null);
-  const [newCategory,setNewCategory]=useState("");
-  const fileRef=useRef(null);
+  const [menuTab, setMenuTab] = useState("items");
+  const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [newCat, setNewCat] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploadPreview, setUploadPreview] = useState(null);
+  const fileRef = useRef(null);
+  const emptyForm = { name:"", category: categories.filter(c=>c!=="All")[0]||"Cold Brew", desc:"", price:"", emoji:"☕", imageUrl:"" };
+  const [form, setForm] = useState(emptyForm);
 
-  const handleImageUpload=async(e)=>{
-    const file=e.target.files[0];
-    if(!file)return;
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
     setUploading(true);
     try {
-      const storageRef=ref(storage,`menu/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef,file);
-      const url=await getDownloadURL(storageRef);
-      setForm(p=>({...p,imageUrl:url}));
+      const storageRef = ref(storage, "menu/" + Date.now() + "_" + file.name);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      setForm(p => ({ ...p, imageUrl: url }));
       setUploadPreview(URL.createObjectURL(file));
-    } catch(err){alert("Upload failed. Please try again.");}
+    } catch (err) { alert("Upload failed."); }
     setUploading(false);
   };
 
-  const submit=async()=>{
-    if(!form.name||!form.price)return;
-    if(editing){await onEdit({...editing,...form,price:parseInt(form.price)});setEditing(null);}
-    else{await onAdd({...form,price:parseInt(form.price),available:true});setAdding(false);}
-    setForm(empty);setUploadPreview(null);
+  const submit = async () => {
+    if (!form.name || !form.price) return;
+    if (editing) {
+      await onEdit({ ...editing, ...form, price: parseInt(form.price) });
+      setEditing(null);
+    } else {
+      await onAdd({ ...form, price: parseInt(form.price), available: true });
+      setAdding(false);
+    }
+    setForm(emptyForm);
+    setUploadPreview(null);
   };
 
-  const startEdit=(item)=>{
+  const startEdit = (item) => {
     setEditing(item);
-    setForm({name:item.name,category:item.category,desc:item.desc,price:item.price,emoji:item.emoji,imageUrl:item.imageUrl||""});
-    setUploadPreview(item.imageUrl||null);
+    setForm({ name: item.name, category: item.category, desc: item.desc, price: item.price, emoji: item.emoji, imageUrl: item.imageUrl || "" });
+    setUploadPreview(item.imageUrl || null);
     setAdding(false);
   };
-  const inp={width:"100%",padding:"9px 12px",borderRadius:8,border:`1px solid ${T.border}`,background:T.surface,fontSize:14};
+
+  const inp = { width:"100%", padding:"9px 12px", borderRadius:8, border:`1px solid ${T.border}`, background:T.surface, fontSize:14 };
 
   return (
     <div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-        <div style={{fontFamily:"'DM Serif Display',serif",fontSize:20}}>Menu ({menu.length} items)</div>
-        <Btn small onClick={()=>{setAdding(!adding);setEditing(null);setForm(empty);setUploadPreview(null);}}>{adding?"Cancel":"+ Add Item"}</Btn>
+      <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16}}>
+        <div style={{fontFamily:"'DM Serif Display',serif", fontSize:20}}>Menu ({menu.length} items)</div>
+        <Btn small onClick={() => { setAdding(!adding); setEditing(null); setForm(emptyForm); setUploadPreview(null); }}>
+          {adding ? "Cancel" : "+ Add Item"}
+        </Btn>
       </div>
 
-      {/* Menu sub-tabs */}
-      <div style={{display:"flex",gap:4,background:T.surface,borderRadius:10,padding:3,border:`1px solid ${T.border}`,width:"fit-content",marginBottom:20}}>
-        {[["items","🍵 Items"],["categories","🏷️ Categories"]].map(([k,l])=>(
-          <button key={k} onClick={()=>setActiveMenuTab(k)} style={{background:activeMenuTab===k?T.accent:"transparent",color:activeMenuTab===k?"#FFF":T.inkMid,border:"none",borderRadius:8,padding:"7px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>{l}</button>
+      <div style={{display:"flex", gap:4, background:T.surface, borderRadius:10, padding:3, border:`1px solid ${T.border}`, width:"fit-content", marginBottom:20}}>
+        {[["items","🍵 Items"],["categories","🏷️ Categories"]].map(([k,l]) => (
+          <button key={k} onClick={() => setMenuTab(k)} style={{background:menuTab===k?T.accent:"transparent", color:menuTab===k?"#FFF":T.inkMid, border:"none", borderRadius:8, padding:"7px 16px", fontSize:13, fontWeight:600, cursor:"pointer"}}>{l}</button>
         ))}
       </div>
 
-      {/* Category Manager */}
-      {activeMenuTab==="categories"&&(
-        <div style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:14,padding:20,marginBottom:20}}>
-          <div style={{fontWeight:600,fontSize:15,marginBottom:16}}>Manage Categories</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}}>
-            {categories.filter(c=>c!=="All").map(cat=>(
-              <div key={cat} style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:T.surfaceAlt,borderRadius:10,padding:"10px 14px",border:`1px solid ${T.border}`}}>
-                <span style={{fontWeight:600,fontSize:14}}>{cat}</span>
-                <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                  <span style={{fontSize:12,color:T.inkLight}}>{menu.filter(m=>m.category===cat).length} items</span>
-                  <button onClick={()=>onDeleteCategory(cat)} style={{background:T.redBg,border:"none",borderRadius:6,padding:"4px 10px",cursor:"pointer",fontSize:12,fontWeight:600,color:T.red}}>Remove</button>
+      {menuTab === "categories" && (
+        <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:14, padding:20, marginBottom:20}}>
+          <div style={{fontWeight:600, fontSize:15, marginBottom:16}}>Manage Categories</div>
+          <div style={{display:"flex", flexDirection:"column", gap:8, marginBottom:16}}>
+            {categories.filter(c => c !== "All").map(cat => (
+              <div key={cat} style={{display:"flex", justifyContent:"space-between", alignItems:"center", background:T.surfaceAlt, borderRadius:10, padding:"10px 14px", border:`1px solid ${T.border}`}}>
+                <span style={{fontWeight:600, fontSize:14}}>{cat}</span>
+                <div style={{display:"flex", gap:8, alignItems:"center"}}>
+                  <span style={{fontSize:12, color:T.inkLight}}>{menu.filter(m => m.category === cat).length} items</span>
+                  <button onClick={() => onDeleteCategory(cat)} style={{background:T.redBg, border:"none", borderRadius:6, padding:"4px 10px", cursor:"pointer", fontSize:12, fontWeight:600, color:T.red}}>Remove</button>
                 </div>
               </div>
             ))}
           </div>
-          <div style={{display:"flex",gap:10}}>
-            <input value={newCategory} onChange={e=>setNewCategory(e.target.value)} placeholder="New category name..." style={{flex:1,padding:"10px 12px",borderRadius:8,border:`1px solid ${T.border}`,background:T.surfaceAlt,fontSize:14}} onKeyDown={e=>{if(e.key==="Enter"&&newCategory.trim()){onAddCategory(newCategory.trim());setNewCategory("");}}}/>
-            <Btn small onClick={()=>{if(newCategory.trim()){onAddCategory(newCategory.trim());setNewCategory("");}}} >+ Add</Btn>
+          <div style={{display:"flex", gap:10}}>
+            <input value={newCat} onChange={e => setNewCat(e.target.value)} placeholder="New category name..."
+              style={{flex:1, padding:"10px 12px", borderRadius:8, border:`1px solid ${T.border}`, background:T.surfaceAlt, fontSize:14}}
+              onKeyDown={e => { if (e.key === "Enter" && newCat.trim()) { onAddCategory(newCat.trim()); setNewCat(""); } }} />
+            <Btn small onClick={() => { if (newCat.trim()) { onAddCategory(newCat.trim()); setNewCat(""); } }}>+ Add</Btn>
           </div>
         </div>
       )}
 
-      {activeMenuTab==="items"&&(
+      {menuTab === "items" && (
         <div>
-        {(adding||editing)&&(
-        <div style={{background:T.surfaceAlt,border:`1px solid ${T.border}`,borderRadius:14,padding:20,marginBottom:20,display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-          <div style={{gridColumn:"1/-1",fontWeight:600,fontSize:15}}>{editing?"Edit item":"New item"}</div>
-          <div style={{gridColumn:"1/-1"}}><label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:4}}>Name</label><input value={form.name} onChange={e=>setForm(p=>({...p,name:e.target.value}))} style={inp}/></div>
-          <div style={{gridColumn:"1/-1"}}><label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:4}}>Description</label><input value={form.desc} onChange={e=>setForm(p=>({...p,desc:e.target.value}))} style={inp}/></div>
-          <div><label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:4}}>Category</label>
-            <select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))} style={inp}>
-              {categories.filter(c=>c!=="All").map(c=><option key={c}>{c}</option>)}
-            </select>
-          </div>
-          <div><label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:4}}>Price (RM)</label><input type="number" value={form.price} onChange={e=>setForm(p=>({...p,price:e.target.value}))} style={inp}/></div>
-          <div><label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:4}}>Emoji (fallback)</label><input value={form.emoji} onChange={e=>setForm(p=>({...p,emoji:e.target.value}))} style={{...inp,width:70,fontSize:18}}/></div>
-
-          {/* Image upload */}
-          <div style={{gridColumn:"1/-1"}}>
-            <label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:8}}>Drink Photo</label>
-            <div style={{display:"flex",gap:16,alignItems:"flex-start"}}>
-              {/* Preview */}
-              <div onClick={()=>fileRef.current?.click()} style={{width:100,height:100,borderRadius:12,border:`2px dashed ${T.border}`,background:T.surface,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",overflow:"hidden",flexShrink:0,position:"relative"}}>
-                {uploadPreview||form.imageUrl?(
-                  <img src={uploadPreview||form.imageUrl} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                ):(
-                  <div style={{textAlign:"center",color:T.inkLight}}>
-                    <div style={{fontSize:24,marginBottom:4}}>📷</div>
-                    <div style={{fontSize:11}}>Tap to upload</div>
-                  </div>
-                )}
-                {uploading&&<div style={{position:"absolute",inset:0,background:"rgba(255,255,255,0.8)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:600,color:T.inkMid}}>Uploading...</div>}
+          {(adding || editing) && (
+            <div style={{background:T.surfaceAlt, border:`1px solid ${T.border}`, borderRadius:14, padding:20, marginBottom:20, display:"grid", gridTemplateColumns:"1fr 1fr", gap:12}}>
+              <div style={{gridColumn:"1/-1", fontWeight:600}}>{editing ? "Edit item" : "New item"}</div>
+              <div style={{gridColumn:"1/-1"}}>
+                <label style={{fontSize:12, fontWeight:600, color:T.inkMid, display:"block", marginBottom:4}}>Name</label>
+                <input value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} style={inp} />
               </div>
-              <div style={{flex:1}}>
-                <input ref={fileRef} type="file" accept="image/*" onChange={handleImageUpload} style={{display:"none"}}/>
-                <button onClick={()=>fileRef.current?.click()} disabled={uploading} style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:8,padding:"8px 16px",cursor:"pointer",fontSize:13,fontWeight:600,color:T.inkMid,marginBottom:8,display:"block"}}>
-                  {uploading?"Uploading...":"📷 Choose Photo"}
-                </button>
-                <div style={{fontSize:12,color:T.inkLight,lineHeight:1.5}}>Upload a clear photo of the drink. JPG or PNG, max 5MB. If no photo, the emoji will show instead.</div>
-                {form.imageUrl&&!uploading&&<div style={{fontSize:12,color:T.green,marginTop:6,fontWeight:600}}>✓ Photo uploaded</div>}
+              <div style={{gridColumn:"1/-1"}}>
+                <label style={{fontSize:12, fontWeight:600, color:T.inkMid, display:"block", marginBottom:4}}>Description</label>
+                <input value={form.desc} onChange={e => setForm(p => ({ ...p, desc: e.target.value }))} style={inp} />
+              </div>
+              <div>
+                <label style={{fontSize:12, fontWeight:600, color:T.inkMid, display:"block", marginBottom:4}}>Category</label>
+                <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} style={inp}>
+                  {categories.filter(c => c !== "All").map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{fontSize:12, fontWeight:600, color:T.inkMid, display:"block", marginBottom:4}}>Price (RM)</label>
+                <input type="number" value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))} style={inp} />
+              </div>
+              <div>
+                <label style={{fontSize:12, fontWeight:600, color:T.inkMid, display:"block", marginBottom:4}}>Emoji (fallback)</label>
+                <input value={form.emoji} onChange={e => setForm(p => ({ ...p, emoji: e.target.value }))} style={{...inp, width:70, fontSize:18}} />
+              </div>
+              <div style={{gridColumn:"1/-1"}}>
+                <label style={{fontSize:12, fontWeight:600, color:T.inkMid, display:"block", marginBottom:8}}>Drink Photo</label>
+                <div style={{display:"flex", gap:16, alignItems:"flex-start"}}>
+                  <div onClick={() => fileRef.current?.click()} style={{width:100, height:100, borderRadius:12, border:`2px dashed ${T.border}`, background:T.surface, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", overflow:"hidden", flexShrink:0, position:"relative"}}>
+                    {uploadPreview || form.imageUrl
+                      ? <img src={uploadPreview || form.imageUrl} alt="" style={{width:"100%", height:"100%", objectFit:"cover"}} />
+                      : <div style={{textAlign:"center", color:T.inkLight}}><div style={{fontSize:24, marginBottom:4}}>📷</div><div style={{fontSize:11}}>Tap to upload</div></div>
+                    }
+                    {uploading && <div style={{position:"absolute", inset:0, background:"rgba(255,255,255,0.8)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:600, color:T.inkMid}}>Uploading...</div>}
+                  </div>
+                  <div style={{flex:1}}>
+                    <input ref={fileRef} type="file" accept="image/*" onChange={handleImageUpload} style={{display:"none"}} />
+                    <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:8, padding:"8px 16px", cursor:"pointer", fontSize:13, fontWeight:600, color:T.inkMid, marginBottom:8, display:"block"}}>
+                      {uploading ? "Uploading..." : "📷 Choose Photo"}
+                    </button>
+                    <div style={{fontSize:12, color:T.inkLight, lineHeight:1.5}}>Upload a clear photo. JPG or PNG, max 5MB.</div>
+                    {form.imageUrl && !uploading && <div style={{fontSize:12, color:T.green, marginTop:6, fontWeight:600}}>✓ Photo uploaded</div>}
+                  </div>
+                </div>
+              </div>
+              <div style={{gridColumn:"1/-1", display:"flex", gap:10}}>
+                <Btn onClick={submit} disabled={uploading}>{editing ? "Save changes" : "Add to menu"}</Btn>
+                {editing && <Btn variant="secondary" onClick={() => { setEditing(null); setForm(emptyForm); setUploadPreview(null); }}>Cancel</Btn>}
               </div>
             </div>
-          </div>
+          )}
 
-          <div style={{gridColumn:"1/-1",display:"flex",gap:10}}>
-            <Btn onClick={submit} disabled={uploading}>{editing?"Save changes":"Add to menu"}</Btn>
-            {editing&&<Btn variant="secondary" onClick={()=>{setEditing(null);setForm(empty);setUploadPreview(null);}}>Cancel</Btn>}
+          <div style={{display:"flex", flexDirection:"column", gap:8}}>
+            {menu.map(item => (
+              <div key={item.id} style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:10, padding:"12px 16px", display:"flex", alignItems:"center", gap:12, flexWrap:"wrap"}}>
+                <div style={{width:52, height:52, borderRadius:10, overflow:"hidden", flexShrink:0, background:T.surfaceAlt, display:"flex", alignItems:"center", justifyContent:"center"}}>
+                  {getItemImage(item) ? <img src={getItemImage(item)} alt={item.name} style={{width:"100%", height:"100%", objectFit:"cover"}} /> : <span style={{fontSize:24}}>{item.emoji}</span>}
+                </div>
+                <div style={{flex:1, minWidth:120}}>
+                  <div style={{fontWeight:600, fontSize:14}}>{item.name}</div>
+                  <div style={{fontSize:12, color:T.inkLight}}>{item.category} · RM {item.price}</div>
+                </div>
+                <div style={{display:"flex", alignItems:"center", gap:8, flexWrap:"wrap"}}>
+                  <span style={{background:item.available?T.greenBg:T.redBg, color:item.available?T.green:T.red, borderRadius:20, padding:"3px 10px", fontSize:11, fontWeight:600}}>{item.available ? "Available" : "Sold out"}</span>
+                  <button onClick={() => startEdit(item)} style={{background:T.surfaceAlt, border:`1px solid ${T.border}`, borderRadius:6, padding:"5px 12px", cursor:"pointer", fontSize:12, fontWeight:600, color:T.inkMid}}>Edit</button>
+                  <button onClick={() => onToggle(item)} style={{background:T.surfaceAlt, border:`1px solid ${T.border}`, borderRadius:6, padding:"5px 12px", cursor:"pointer", fontSize:12, fontWeight:600, color:T.inkMid}}>{item.available ? "Sold Out" : "Available"}</button>
+                  <button onClick={() => onDelete(item.id)} style={{background:T.redBg, border:"none", borderRadius:6, padding:"5px 10px", cursor:"pointer", fontSize:12, fontWeight:600, color:T.red}}>✕</button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
-
-      <div style={{display:"flex",flexDirection:"column",gap:8}}>
-        {menu.map(item=>(
-          <div key={item.id} style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:10,padding:"12px 16px",display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
-            <div style={{width:52,height:52,borderRadius:10,overflow:"hidden",flexShrink:0,background:T.surfaceAlt,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              {getItemImage(item)?<img src={getItemImage(item)} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:24}}>{item.emoji}</span>}
-            </div>
-            <div style={{flex:1,minWidth:120}}>
-              <div style={{fontWeight:600,fontSize:14}}>{item.name}</div>
-              <div style={{fontSize:12,color:T.inkLight}}>{item.category} · RM {item.price}</div>
-            </div>
-            <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-              <span style={{background:item.available?T.greenBg:T.redBg,color:item.available?T.green:T.red,borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:600}}>{item.available?"Available":"Sold out"}</span>
-              <button onClick={()=>startEdit(item)} style={{background:T.surfaceAlt,border:`1px solid ${T.border}`,borderRadius:6,padding:"5px 12px",cursor:"pointer",fontSize:12,fontWeight:600,color:T.inkMid}}>Edit</button>
-              <button onClick={()=>onToggle(item)} style={{background:T.surfaceAlt,border:`1px solid ${T.border}`,borderRadius:6,padding:"5px 12px",cursor:"pointer",fontSize:12,fontWeight:600,color:T.inkMid}}>{item.available?"Sold Out":"Available"}</button>
-              <button onClick={()=>onDelete(item.id)} style={{background:T.redBg,border:"none",borderRadius:6,padding:"5px 10px",cursor:"pointer",fontSize:12,fontWeight:600,color:T.red}}>✕</button>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -953,7 +946,7 @@ export default function App() {
   const [menu,setMenu]=useState([]);
   const [orders,setOrders]=useState([]);
   const [banner,setBanner]=useState(null);
-  const [customerCategories,setCustomerCategories]=useState(CATEGORIES);
+  const [custCategories,setCustCategories]=useState(CATEGORIES);
   const [menuReady,setMenuReady]=useState(false);
 
   useEffect(()=>onAuthStateChanged(auth,u=>setUser(u||null)),[]);
@@ -984,10 +977,9 @@ export default function App() {
       if(snap.exists())setBanner(snap.data());
     });
   },[]);
-
   useEffect(()=>{
     return onSnapshot(doc(db,"settings","categories"),snap=>{
-      if(snap.exists()&&snap.data().list) setCustomerCategories(["All",...snap.data().list]);
+      if(snap.exists()&&snap.data().list) setCustCategories(["All",...snap.data().list]);
     });
   },[]);
 
@@ -996,7 +988,7 @@ export default function App() {
   return (
     <>
       <style>{css}</style>
-      {!user?<LoginPage/>:user.email===ADMIN_EMAIL?<AdminView user={user} menu={menu} orders={orders} banner={banner}/>:<CustomerView user={user} menu={menu} banner={banner} categories={customerCategories}/>}
+      {!user?<LoginPage/>:user.email===ADMIN_EMAIL?<AdminView user={user} menu={menu} orders={orders} banner={banner}/>:<CustomerView user={user} menu={menu} banner={banner} categories={custCategories}/>}
     </>
   );
 }
