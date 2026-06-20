@@ -281,6 +281,7 @@ function OrderHistory({ orders }) {
             </div>
           ))}
         </div>
+        </div>
       )}
     </div>
   );
@@ -893,7 +894,6 @@ function AdminMenu({ menu, onToggle, onAdd, onEdit, onDelete, categories, onAddC
           </div>
         ))}
       </div>
-      )}
     </div>
   );
 }
