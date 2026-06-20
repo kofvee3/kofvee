@@ -53,6 +53,27 @@ const DEFAULT_MENU = [
 
 const CATEGORIES = ["All","Cold Brew","Espresso","Signature","Non-Coffee","Bites"];
 
+// ─── STATIC DRINK IMAGES ─────────────────────────────────────────────────────
+const DRINK_IMAGES = {
+  "m1": "/drinks/original-cold-brew.jpg",
+  "m2": "/drinks/salted-caramel-cold-brew.jpg",
+  "m3": "/drinks/coconut-cold-brew.jpg",
+  "m4": "/drinks/kofvee-white.jpg",
+  "m5": "/drinks/iced-americano.jpg",
+  "m6": "/drinks/oat-latte.jpg",
+  "m7": "/drinks/kofvee-signature.jpg",
+  "m8": "/drinks/brown-sugar-oat.jpg",
+  "m9": "/drinks/matcha-oat.jpg",
+  "m10": "/drinks/hojicha-latte.jpg",
+  "m11": "/drinks/cheesecake.jpg",
+  "m12": "/drinks/overnight-oat-cup.jpg",
+  "m13": "/drinks/matcha-cheesecake.jpg",
+};
+
+function getItemImage(item) {
+  return item.imageUrl || DRINK_IMAGES[item.id] || null;
+}
+
 // ─── TOKENS ──────────────────────────────────────────────────────────────────
 const T = {
   bg:"#F7F4EF", surface:"#FFFFFF", surfaceAlt:"#F0ECE5",
@@ -482,7 +503,7 @@ function CustomerView({ user, menu, banner }) {
                   {cart.map(item=>(
                     <div key={item.id} style={{display:"flex",alignItems:"center",gap:10}}>
                       <div style={{width:36,height:36,borderRadius:8,overflow:"hidden",background:T.surfaceAlt,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                        {item.imageUrl?<img src={item.imageUrl} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:18}}>{item.emoji}</span>}
+                        {getItemImage(item)?<img src={getItemImage(item)} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:18}}>{item.emoji}</span>}
                       </div>
                       <div style={{flex:1}}>
                         <div style={{fontSize:14,fontWeight:600}}>{item.name}</div>
@@ -781,7 +802,7 @@ function AdminMenu({ menu, onToggle, onAdd, onEdit, onDelete }) {
         {menu.map(item=>(
           <div key={item.id} style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:10,padding:"12px 16px",display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
             <div style={{width:52,height:52,borderRadius:10,overflow:"hidden",flexShrink:0,background:T.surfaceAlt,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              {item.imageUrl?<img src={item.imageUrl} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:24}}>{item.emoji}</span>}
+              {getItemImage(item)?<img src={getItemImage(item)} alt={item.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<span style={{fontSize:24}}>{item.emoji}</span>}
             </div>
             <div style={{flex:1,minWidth:120}}>
               <div style={{fontWeight:600,fontSize:14}}>{item.name}</div>
