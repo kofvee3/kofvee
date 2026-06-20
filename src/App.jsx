@@ -825,9 +825,9 @@ function AdminMenu({ menu, onToggle, onAdd, onEdit, onDelete, categories, onAddC
         </div>
       )}
 
-      {activeMenuTab==="items"&&(<>
-
-      {(adding||editing)&&(
+      {activeMenuTab==="items"&&(
+        <div>
+        {(adding||editing)&&(
         <div style={{background:T.surfaceAlt,border:`1px solid ${T.border}`,borderRadius:14,padding:20,marginBottom:20,display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <div style={{gridColumn:"1/-1",fontWeight:600,fontSize:15}}>{editing?"Edit item":"New item"}</div>
           <div style={{gridColumn:"1/-1"}}><label style={{fontSize:12,fontWeight:600,color:T.inkMid,display:"block",marginBottom:4}}>Name</label><input value={form.name} onChange={e=>setForm(p=>({...p,name:e.target.value}))} style={inp}/></div>
