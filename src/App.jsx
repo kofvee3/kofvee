@@ -452,7 +452,7 @@ function CustomerView({ user, menu, banner, categories }) {
                           <div style={{display:"flex",alignItems:"center",gap:6,background:T.surfaceAlt,borderRadius:50,padding:"4px 6px",border:`1px solid ${T.border}`}}>
                             <button onClick={()=>changeQty(item.id,-1)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>−</button>
                             <span style={{fontWeight:700,minWidth:20,textAlign:"center",fontSize:14}}>{inCart.qty}</span>
-                            <button onClick={()=>{setSweetnessPicker(item);setSelectedSweetness(null);}} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:50,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer"}}>+ Add</button>
+                            <button onClick={()=>addToCart({...item,sweetness:item._lastSweetness||"Normal Sweet"})} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
                           </div>
                         ) : (
                           <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:50,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer"}}>+ Add</button>
@@ -674,7 +674,7 @@ function AdminOrders({ orders, onStatusChange }) {
           <div style={{flex:2,minWidth:180}}>
             {o.items.map((i,idx)=>(
               <div key={idx} style={{display:"flex",justifyContent:"space-between",fontSize:13,color:T.inkMid,marginBottom:3}}>
-                <span>{i.emoji} {i.name} ×{i.qty}</span>
+                <span>{i.emoji} {i.name} ×{i.qty}{i.sweetness?` (${i.sweetness})`:""}</span>
                 <span style={{fontWeight:600,color:T.ink}}>RM {i.price*i.qty}</span>
               </div>
             ))}
@@ -738,7 +738,7 @@ function AdminMenu({ menu, onToggle, onAdd, onEdit, onDelete, categories, onAddC
   const [uploading, setUploading] = useState(false);
   const [uploadPreview, setUploadPreview] = useState(null);
   const fileRef = useRef(null);
-  const emptyForm = { name:"", category: categories.filter(c=>c!=="All")[0]||"Cold Brew", desc:"", price:"", emoji:"☕", imageUrl:"" };
+  const emptyForm = { name:"", category: categories.filter(c=>c!=="All")[0]||"Cold Brew", desc:"", price:"", emoji:"☕", imageUrl:"", hasSweetness:true };
   const [form, setForm] = useState(emptyForm);
 
   const handleImageUpload = async (e) => {
