@@ -304,6 +304,8 @@ function CustomerView({ user, menu, banner, categories }) {
   const [orders,setOrders]=useState([]);
   const [bannerDismissed,setBannerDismissed]=useState(false);
   const [redeemMode,setRedeemMode]=useState(false);
+  const [sweetnessPicker,setSweetnessPicker]=useState(null);
+  const [selectedSweetness,setSelectedSweetness]=useState(null);
 
   // Load customer data
   useEffect(()=>{
@@ -412,6 +414,7 @@ function CustomerView({ user, menu, banner, categories }) {
               ))}
             </div>
 
+            {sweetnessPicker&&(<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:800,padding:20}} onClick={()=>setSweetnessPicker(null)}><div style={{background:T.surface,borderRadius:20,padding:"28px 24px",maxWidth:340,width:"100%"}} onClick={e=>e.stopPropagation()}><div style={{textAlign:"center",marginBottom:16}}><div style={{fontFamily:"DM Serif Display,serif",fontSize:18,fontWeight:700,color:T.ink}}>{sweetnessPicker.name}</div><div style={{fontSize:13,color:T.inkMid,marginTop:4,marginBottom:20}}>Choose sweetness level</div></div><div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>{["Normal Sweet","Less Sweet","No Sugar"].map(opt=>(<button key={opt} onClick={()=>setSelectedSweetness(opt)} style={{background:selectedSweetness===opt?T.accent:T.surfaceAlt,color:selectedSweetness===opt?"#FFF":T.ink,border:`2px solid ${selectedSweetness===opt?T.accent:T.border}`,borderRadius:12,padding:"13px 20px",fontSize:14,fontWeight:600,cursor:"pointer",textAlign:"left",display:"flex",justifyContent:"space-between"}}><span>{opt}</span>{selectedSweetness===opt&&<span>✓</span>}</button>))}</div><div style={{display:"flex",gap:10}}><button onClick={()=>setSweetnessPicker(null)} style={{flex:1,background:T.surfaceAlt,border:`1px solid ${T.border}`,borderRadius:10,padding:"12px",fontSize:14,fontWeight:600,cursor:"pointer",color:T.inkMid}}>Cancel</button><button onClick={()=>{if(!selectedSweetness)return;addToCart({...sweetnessPicker,sweetness:selectedSweetness});setSweetnessPicker(null);setSelectedSweetness(null);}} disabled={!selectedSweetness} style={{flex:2,background:selectedSweetness?T.accent:"#ccc",color:"#FFF",border:"none",borderRadius:10,padding:"12px",fontSize:14,fontWeight:700,cursor:selectedSweetness?"pointer":"not-allowed"}}>Add to Order</button></div></div></div>)}
             {/* Menu GRID */}
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:16}}>
               {filtered.map(item => {
@@ -449,7 +452,7 @@ function CustomerView({ user, menu, banner, categories }) {
                           <div style={{display:"flex",alignItems:"center",gap:6,background:T.surfaceAlt,borderRadius:50,padding:"4px 6px",border:`1px solid ${T.border}`}}>
                             <button onClick={()=>changeQty(item.id,-1)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>−</button>
                             <span style={{fontWeight:700,minWidth:20,textAlign:"center",fontSize:14}}>{inCart.qty}</span>
-                            <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:"50%",width:28,height:28,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
+                            <button onClick={()=>{setSweetnessPicker(item);setSelectedSweetness(null);}} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:50,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer"}}>+ Add</button>
                           </div>
                         ) : (
                           <button onClick={()=>addToCart(item)} style={{background:T.accent,color:"#FFF",border:"none",borderRadius:50,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer"}}>+ Add</button>
